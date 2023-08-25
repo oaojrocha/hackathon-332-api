@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -31,12 +32,14 @@ public class HistoricoController {
             @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrador")
     })
     public ResponseEntity<?> get(@PathVariable(value = "id_paciente") long idPaciente) {
-        List<HistoricoPaciente> l = HistoricoPacienteRepository.dados.stream()
-                .filter(g -> g.getPaciente().getId() == idPaciente)
-                .collect(Collectors.toList());
 
+        return Optional.of(HistoricoPacienteRepository.dados.stream()
+                .filter(h -> h.getPaciente().getId() == idPaciente)
+                .collect(Collectors.toList()))
+            .filter(body -> !body.isEmpty())
+            .map(body -> ResponseEntity.ok(body))
+            .orElseGet(() -> ResponseEntity.notFound().build());
 
-        return ResponseEntity.ok(l);
     }
 
 }

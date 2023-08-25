@@ -3,6 +3,8 @@ package com.healthcare.techlink.medlink.core.init;
 import com.healthcare.techlink.medlink.core.domain.HistoricoPaciente;
 import com.healthcare.techlink.medlink.core.domain.Medico;
 import com.healthcare.techlink.medlink.core.domain.Paciente;
+import com.healthcare.techlink.medlink.core.domain.Agenda;
+import com.healthcare.techlink.medlink.core.repository.AgendaRepository;
 import com.healthcare.techlink.medlink.core.repository.HistoricoPacienteRepository;
 import com.healthcare.techlink.medlink.core.repository.MedicoRepository;
 import com.healthcare.techlink.medlink.core.repository.PacienteRepository;
@@ -11,15 +13,17 @@ import java.util.Date;
 
 public class Init {
 
+    Paciente p, p1, p2, p3, p4;
+    HistoricoPaciente h, h1, h2, h3, h4;
+    Medico m, m1, m2, m3, m4;
+    Agenda a, a1, a2, a3, a4;
+
     public void initEntities() {
         initPaciente();
         initMedico();
         initHistoricoPaciente();
+        initAgenda();
     }
-
-    Paciente p, p1, p2, p3, p4;
-    HistoricoPaciente h, h1, h2, h3, h4;
-    Medico m, m1, m2, m3, m4;
 
     private void initPaciente() {
         p = new Paciente();
@@ -103,30 +107,35 @@ public class Init {
     private void initMedico() {
 
         m = new Medico();
+        m.setId(1);
         m.setNome("Dr. João");
         m.setEspecialidade("Cardiologista");
         m.setIdade(35);
         m.setHospital("Hospital Central");
 
         m1 = new Medico();
+        m1.setId(2);
         m1.setNome("Dra. Maria");
         m1.setEspecialidade("Pediatra");
         m1.setIdade(28);
         m1.setHospital("Hospital Infantil");
 
         m2 = new Medico();
+        m2.setId(3);
         m2.setNome("Dr. André");
         m2.setEspecialidade("Oftalmologista");
         m2.setIdade(40);
         m2.setHospital("Hospital de Olhos");
 
         m3 = new Medico();
+        m3.setId(4);
         m3.setNome("Dra. Ana");
         m3.setEspecialidade("Ginecologista");
         m3.setIdade(32);
         m3.setHospital("Hospital da Mulher");
 
         m4 = new Medico();
+        m4.setId(5);
         m4.setNome("Dr. Paulo");
         m4.setEspecialidade("Dentista");
         m4.setIdade(45);
@@ -138,6 +147,44 @@ public class Init {
         MedicoRepository.dados.add(m3);
         MedicoRepository.dados.add(m4);
 
+    }
+
+    private void initAgenda() {
+        a = new Agenda();
+        a.setId(1);
+        a.setDataConsulta(new Date());
+        a.setMedico(m);
+        a.setPaciente(p);
+
+        a1 = new Agenda();
+        a1.setId(2);
+        a1.setDataConsulta(new Date());
+        a1.setMedico(m1);
+        a1.setPaciente(p1);
+
+        a2 = new Agenda();
+        a2.setId(3);
+        a2.setDataConsulta(new Date());
+        a2.setMedico(m);
+        a2.setPaciente(p2);
+
+        a3 = new Agenda();
+        a3.setId(4);
+        a3.setDataConsulta(new Date());
+        a3.setMedico(m3);
+        a3.setPaciente(p4);
+
+        a4 = new Agenda();
+        a4.setId(4);
+        a4.setDataConsulta(new Date());
+        a4.setMedico(m);
+        a4.setPaciente(p3);
+
+        AgendaRepository.dados.add(a);
+        AgendaRepository.dados.add(a1);
+        AgendaRepository.dados.add(a2);
+        AgendaRepository.dados.add(a3);
+        AgendaRepository.dados.add(a4);
     }
 
 }
