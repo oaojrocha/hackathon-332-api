@@ -30,7 +30,7 @@ public class HistoricoController {
     @ApiResponses(value = {
             @ApiResponse(code = HttpStatus.SC_OK, message = "Retorna todo o histórico do paciente"),
             @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Erro interno do servidor"),
-            @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrador")
+            @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrado")
     })
     public ResponseEntity<?> get(@PathVariable(value = "id_paciente") long idPaciente) {
 

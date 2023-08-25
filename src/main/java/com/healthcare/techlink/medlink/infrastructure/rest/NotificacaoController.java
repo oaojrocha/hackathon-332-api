@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notificacao")
 public class NotificacaoController {
 
-    @PostMapping("/lembrete-consulta/{id_agenda}")
+    @PostMapping("/lembrete/{id_agenda}")
     @ApiOperation(value = "Envia um lembrete para o paciente sobre a consulta")
     @ApiResponses(value = {
             @ApiResponse(code = HttpStatus.SC_OK, message = "Notificação envidada com sucesso"),
