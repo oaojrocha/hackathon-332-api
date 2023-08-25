@@ -149,15 +149,21 @@ public class AgendamentoController {
             @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Erro interno do servidor"),
             @ApiResponse(code = HttpStatus.SC_BAD_REQUEST, message = "Paciente não encontrador")
     })
-    public ResponseEntity<?> update(@PathVariable(value = "id") long id,  @RequestBody AgendaUpdateDTO payload) {
+    public ResponseEntity<?> update(@PathVariable(value = "id") long id, @RequestBody AgendaUpdateDTO payload) {
 
-        AgendaRepository.dados.stream()
-            .filter(d -> d.getId() == id)
-            .findFirst()
-            .ifPresent(d -> d.setDataConsulta(payload.getDataConsulta()));
+        try {
+            AgendaRepository.dados.stream()
+                    .filter(d -> d.getId() == id)
+                    .findFirst()
+                    .ifPresentOrElse(d -> d.setDataConsulta(payload.getDataConsulta()),
+                            () -> {
+                                throw new RuntimeException("x is null");
+                            });
 
-        return ResponseEntity.ok().build();
-
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -168,8 +174,8 @@ public class AgendamentoController {
             @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrador")
     })
     public ResponseEntity<?> delete(@PathVariable(value = "id") long id) {
-        return AgendaRepository.dados.removeIf(d -> d.getId() == id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
-
+        return AgendaRepository.dados.removeIf(d -> d.getId() == id) ? ResponseEntity.ok().build()
+                : ResponseEntity.notFound().build();
     }
 
 }
