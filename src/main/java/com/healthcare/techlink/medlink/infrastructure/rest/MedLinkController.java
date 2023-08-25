@@ -24,7 +24,6 @@ public class MedLinkController {
             @ApiResponse(code = HttpStatus.SC_OK, message = "Sucesso")
     })
     public ResponseEntity<?> getAll() {
-
         return ResponseEntity.ok().build();
     }
 

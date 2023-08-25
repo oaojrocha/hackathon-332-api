@@ -1,10 +1,23 @@
 package com.healthcare.techlink.medlink.infrastructure.rest;
 
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.apache.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.healthcare.techlink.medlink.core.domain.Agenda;
-import com.healthcare.techlink.medlink.core.domain.HistoricoPaciente;
-import com.healthcare.techlink.medlink.core.domain.Medico;
 import com.healthcare.techlink.medlink.core.repository.AgendaRepository;
-import com.healthcare.techlink.medlink.core.repository.HistoricoPacienteRepository;
 import com.healthcare.techlink.medlink.core.repository.MedicoRepository;
 import com.healthcare.techlink.medlink.core.repository.PacienteRepository;
 import com.healthcare.techlink.medlink.infrastructure.rest.dto.AgendaDTO;
@@ -15,19 +28,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
