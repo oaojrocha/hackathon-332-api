@@ -36,11 +36,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AgendamentoController {
 
     @GetMapping("/medico/{id_medico}")
-    @ApiOperation(value = "Histórico médico do paciente")
+    @ApiOperation(value = "Agenda do médico")
     @ApiResponses(value = {
-            @ApiResponse(code = HttpStatus.SC_OK, message = "Retorna todo o histórico do paciente"),
+            @ApiResponse(code = HttpStatus.SC_OK, message = "Retorna a agenda do médico"),
             @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Erro interno do servidor"),
-            @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrador")
+            @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Médico não encontrado")
     })
     public ResponseEntity<?> getByMedico(@PathVariable(value = "id_medico") long idMedico) {
 
@@ -58,7 +58,7 @@ public class AgendamentoController {
     @ApiResponses(value = {
             @ApiResponse(code = HttpStatus.SC_OK, message = "Retorna todo o histórico do paciente"),
             @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Erro interno do servidor"),
-            @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrador")
+            @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Paciente não encontrado")
     })
     public ResponseEntity<?> getByPaciente(@PathVariable(value = "id_paciente") long idPaciente) {
 
