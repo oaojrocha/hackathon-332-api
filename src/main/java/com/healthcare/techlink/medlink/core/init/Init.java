@@ -28,27 +28,27 @@ public class Init {
     private void initPaciente() {
         p = new Paciente();
         p.setId(1);
-        p.setNome("João Ricardo Rocha");
+        p.setNome("João");
         p.setDataNascimento(new Date());
 
         p1 = new Paciente();
         p1.setId(2);
-        p1.setNome("João Ricardo Rocha");
+        p1.setNome("Julia");
         p1.setDataNascimento(new Date());
 
         p2 = new Paciente();
         p2.setId(3);
-        p2.setNome("João Ricardo Rocha");
+        p2.setNome("Rodrigo");
         p2.setDataNascimento(new Date());
 
         p3 = new Paciente();
         p3.setId(4);
-        p3.setNome("João Ricardo Rocha");
+        p3.setNome("Lima");
         p3.setDataNascimento(new Date());
 
         p4 = new Paciente();
         p4.setId(5);
-        p4.setNome("João Ricardo Rocha");
+        p4.setNome("Leonardo");
         p4.setDataNascimento(new Date());
 
         PacienteRepository.dados.add(p);
