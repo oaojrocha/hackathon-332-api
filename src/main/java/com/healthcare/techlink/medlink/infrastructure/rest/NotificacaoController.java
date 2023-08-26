@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.healthcare.techlink.medlink.core.repository.AgendaRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,12 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/notificacao")
 public class NotificacaoController {
 
-    @PostMapping("/lembrete/{id_agenda}")
+    @PostMapping(value = "/lembrete/{id_agenda}", produces = { "application/json" })
     @Operation(summary = "Enviar lembrete", description = "Envia um lembrete para o paciente sobre a consulta", tags = { "notificacao" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Notificação envidada com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Agendamento não encontrado")
+            @ApiResponse(responseCode = "200", description = "Notificação envidada com sucesso", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Agendamento não encontrado", content = @Content)
     })
     public ResponseEntity<?> enviarLembrete(@PathVariable(value = "id_agenda") long idAgenda) {
         return AgendaRepository.dados.stream().filter(d -> d.getId() == idAgenda).findFirst().isPresent()

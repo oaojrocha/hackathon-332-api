@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.healthcare.techlink.medlink.core.domain.HistoricoPaciente;
 import com.healthcare.techlink.medlink.core.repository.HistoricoPacienteRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,13 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/historico")
 public class HistoricoController {
 
-    @GetMapping("/{id_paciente}")
     @Operation(summary = "Histórico médico do paciente", description = "Retorna todo o histórico de todas as consultas do paciente", tags = { "historico" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna todo o histórico do paciente"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Paciente ou histórico não encontrado")
+            @ApiResponse(responseCode = "200", description = "Retorna todo o histórico do paciente", content = @Content(array = @ArraySchema(schema = @Schema(implementation = HistoricoPaciente.class)))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Paciente ou histórico não encontrado", content = @Content)
     })
+    @GetMapping(value = "/{id_paciente}", produces = { "application/json" })
     public ResponseEntity<?> get(@PathVariable(value = "id_paciente") long idPaciente) {
 
         return Optional.of(HistoricoPacienteRepository.dados.stream()

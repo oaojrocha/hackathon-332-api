@@ -1,6 +1,7 @@
 package com.healthcare.techlink.medlink.infrastructure.rest;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.healthcare.techlink.medlink.core.domain.Agenda;
+import com.healthcare.techlink.medlink.core.domain.HistoricoPaciente;
 import com.healthcare.techlink.medlink.core.repository.AgendaRepository;
 import com.healthcare.techlink.medlink.core.repository.MedicoRepository;
 import com.healthcare.techlink.medlink.core.repository.PacienteRepository;
@@ -24,6 +26,9 @@ import com.healthcare.techlink.medlink.infrastructure.rest.dto.AgendaDTO;
 import com.healthcare.techlink.medlink.infrastructure.rest.dto.AgendaUpdateDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,14 +43,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/agenda")
 public class AgendamentoController {
 
-    @GetMapping("/medico/{id_medico}")
+    @GetMapping(value = "/medico/{id_medico}", produces = { "application/json" })
     @Operation(summary =  "Agenda do médico", description = "Retorna lista de agendas do médico", tags = { "agenda" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna lista de agendas do médico"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Médico ou agenda não encontrado")
+            @ApiResponse(responseCode = "200", description = "Retorna lista de agendas do médico", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Agenda.class)))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Médico ou agenda não encontrado", content = @Content)
     })
-    public ResponseEntity<?> getByMedico(@PathVariable(value = "id_medico") long idMedico) {
+    public ResponseEntity<List<Agenda>> getByMedico(@PathVariable(value = "id_medico") long idMedico) {
 
         return Optional.of(AgendaRepository.dados.stream()
                 .filter(h -> h.getMedico().getId() == idMedico)
@@ -56,14 +61,14 @@ public class AgendamentoController {
 
     }
 
-    @GetMapping("/paciente/{id_paciente}")
+    @GetMapping(value = "/paciente/{id_paciente}", produces = { "application/json" })
     @Operation(summary =  "Agenda do paciente", description = "Retorna lista de agenda paciente", tags = { "agenda" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna lista de agenda do paciente"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Paciente ou agenda não encontrado")
+            @ApiResponse(responseCode = "200", description = "Retorna lista de agenda do paciente", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Agenda.class)))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Paciente ou agenda não encontrado", content = @Content)
     })
-    public ResponseEntity<?> getByPaciente(@PathVariable(value = "id_paciente") long idPaciente) {
+    public ResponseEntity<List<Agenda>> getByPaciente(@PathVariable(value = "id_paciente") long idPaciente) {
 
         return Optional.of(AgendaRepository.dados.stream()
                 .filter(h -> h.getPaciente().getId() == idPaciente)
@@ -74,14 +79,14 @@ public class AgendamentoController {
 
     }
 
-    @GetMapping
+    @GetMapping(produces = { "application/json" })
     @Operation(summary =  "Todas agendas", description = "Retorna lista de todas agendas", tags = { "agenda" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna lista de agenda"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Agenda não encontrada")
+            @ApiResponse(responseCode = "200", description = "Retorna lista de agenda", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Agenda.class)))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Agenda não encontrada", content = @Content)
     })
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<Agenda>> getAll() {
 
         return Optional.of(AgendaRepository.dados.stream()
                 .collect(Collectors.toList()))
@@ -91,30 +96,30 @@ public class AgendamentoController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = { "application/json" })
     @Operation(summary =  "Agenda por id", description = "Retorna a agenda através do id", tags = { "agenda" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Retorna agenda especifica"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Agenda não encontrada")
+            @ApiResponse(responseCode = "200", description = "Retorna agenda especifica", content = @Content(schema = @Schema(implementation = Agenda.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Agenda não encontrada", content = @Content)
     })
-    public ResponseEntity<?> getById(@PathVariable(value = "id") long id) {
+    public ResponseEntity<Agenda> getById(@PathVariable(value = "id") long id) {
 
-        return Optional.of(AgendaRepository.dados.stream()
+        return AgendaRepository.dados.stream()
                 .filter(h -> h.getId() == id)
-                .collect(Collectors.toList()))
-                .filter(body -> !body.isEmpty())
+                .findFirst()
+                .filter(body -> Objects.nonNull(body))
                 .map(body -> ResponseEntity.ok(body))
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
-    @PostMapping
+    @PostMapping(produces = { "application/json" })
     @Operation(summary =  "Cadatrar agenda", tags = { "agenda" })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Cadastra agenda"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
-            @ApiResponse(responseCode = "404", description = "Paciente ou médico não encontrado")
+            @ApiResponse(responseCode = "201", description = "Cadastra agenda", content = @Content(schema = @Schema(implementation = Agenda.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Paciente ou médico não encontrado", content = @Content)
     })
     public ResponseEntity<Agenda> create(@RequestBody AgendaDTO payload) {
 
@@ -144,14 +149,14 @@ public class AgendamentoController {
         return new ResponseEntity<Agenda>(a, org.springframework.http.HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}")
     @Operation(summary =  "Atualizar agenda", tags = { "agenda" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualiza a agenda"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
             @ApiResponse(responseCode = "404", description = "Agenda não encontrada")
     })
-    public ResponseEntity<?> update(@PathVariable(value = "id") long id, @RequestBody AgendaUpdateDTO payload) {
+    public ResponseEntity<Void> update(@PathVariable(value = "id") long id, @RequestBody AgendaUpdateDTO payload) {
 
         try {
             AgendaRepository.dados.stream()
@@ -168,14 +173,14 @@ public class AgendamentoController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     @Operation(summary =  "Deletar agenda", tags = { "agenda" })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Deleta agenda"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
             @ApiResponse(responseCode = "404", description = "Agenda não encontrada")
     })
-    public ResponseEntity<?> delete(@PathVariable(value = "id") long id) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id") long id) {
         return AgendaRepository.dados.removeIf(d -> d.getId() == id) ? ResponseEntity.ok().build()
                 : ResponseEntity.notFound().build();
     }
